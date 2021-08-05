@@ -90,6 +90,17 @@ describe User, type: :model do
         expect(@user.errors.full_messages).to include("Birthday can't be blank")
       end
 
+      it "passwordが半角英数のみでは登録できない" do
+        @user.password = "aaaaaa"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
+      end
+
+      it "passwordが半角数字のみでは登録できない" do
+        @user.password = "000000"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password", "Password is invalid")
+      end
     end
   end
 end
