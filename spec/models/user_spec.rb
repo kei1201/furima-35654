@@ -52,6 +52,11 @@ describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
+      it "passwordが全角では登録できない" do
+        @user.password = "００００００"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password", "Password is invalid")
+      end
       it "last_nameが空では登録できない" do
         @user.last_name = ""
         @user.valid?
@@ -62,11 +67,15 @@ describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include("First name can't be blank", "First name is invalid")
       end
-      it "last_nameとfirst_nameが半角文字だと登録できない" do
+      it "last_nameが半角文字だと登録できない" do
         @user.last_name = "yamada"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Last name is invalid")
+      end
+      it "first_nameが半角文字だと登録できない" do
         @user.first_name = "tarou"
         @user.valid?
-        expect(@user.errors.full_messages).to include("Last name is invalid", "First name is invalid")
+        expect(@user.errors.full_messages).to include("First name is invalid")
       end
       it "kana_lastが空だと登録できない" do
         @user.kana_last= ""
@@ -78,11 +87,15 @@ describe User, type: :model do
       @user.valid?
       expect(@user.errors.full_messages).to include("Kana first can't be blank", "Kana first is invalid")
       end
-      it "kana_lastとkana_fristがカタカナでないと登録できない" do
+      it "kana_lastがカタカナでないと登録できない" do
         @user.kana_last = "yamada"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Kana last is invalid")
+      end
+      it "kana_fristがカタカナでないと登録できない" do
         @user.kana_first = "tarou"
         @user.valid?
-        expect(@user.errors.full_messages).to include("Kana last is invalid", "Kana first is invalid")
+        expect(@user.errors.full_messages).to include("Kana first is invalid")
       end
       it "birthdayが空では登録できない" do
         @user.birthday = ""
