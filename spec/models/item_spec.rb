@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Item, type: :model do
+RSpec.describe Item, type: :model do
 
   before do
     @item = FactoryBot.build(:item)
@@ -78,6 +78,15 @@ describe Item, type: :model do
           @item.price = "10000000"
           @item.valid?
           expect(@item.errors.full_messages).to include("Price must be less than 9999999")
+        end
+        it 'それぞれのidが1で選択された場合は登録できない' do
+          @item.category_id = '1'
+          @item.sales_status_id = '1'
+          @item.shipping_fee_status_id = '1' 
+          @item.prefecture_id = '1'
+          @item.scheduled_delivery_id = '1'
+          @item.valid?
+          expect(@item.errors.full_messages).to include("Category must be other than 1", "Sales status must be other than 1", "Shipping fee status must be other than 1", "Prefecture must be other than 1", "Scheduled delivery must be other than 1")
         end
       end
 
