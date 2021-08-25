@@ -60,34 +60,51 @@ RSpec.describe Item, type: :model do
           expect(@item.errors.full_messages).to include("Scheduled delivery can't be blank", "Scheduled delivery is not a number")
         end
         it 'priceが空では登録されない' do
-          @item.price = ""
+          @item.price = ''
           @item.valid?
           expect(@item.errors.full_messages).to include("Price can't be blank", "Price is invalid", "Price is not a number")
         end
         it 'priceが半角数字以外では登録できない' do
-          @item.price = "５００"
+          @item.price = '５００'
           @item.valid?
           expect(@item.errors.full_messages).to include("Price is not a number")
         end
         it 'priceが300より少ないと登録できない' do
-          @item.price = "50"
+          @item.price = '50'
           @item.valid?
           expect(@item.errors.full_messages).to include("Price must be greater than 300")
         end
         it 'priceが9999999より多いと登録できない' do
-          @item.price = "10000000"
+          @item.price = '10000000'
           @item.valid?
           expect(@item.errors.full_messages).to include("Price must be less than 9999999")
         end
-        it 'それぞれのidが1で選択された場合は登録できない' do
+        it 'category_idが1で選択された場合は登録できない' do
           @item.category_id = '1'
+          @item.valid?
+          expect(@item.errors.full_messages).to include("Category must be other than 1")
+        end
+        it 'sales_status_idが1で選択された場合は登録できない' do
           @item.sales_status_id = '1'
-          @item.shipping_fee_status_id = '1' 
+          @item.valid?
+          expect(@item.errors.full_messages).to include("Sales status must be other than 1")
+        end
+        it 'shipping_fee_status_id が1で選択された場合は登録できない' do
+          @item.shipping_fee_status_id = '1'
+          @item.valid?
+          expect(@item.errors.full_messages).to include("Shipping fee status must be other than 1")
+        end
+        it 'prefecture_idが1で選択された場合は登録できない' do
           @item.prefecture_id = '1'
+          @item.valid?
+          expect(@item.errors.full_messages).to include("Prefecture must be other than 1")
+        end
+        it 'scheduled_delivery_id が1で選択された場合は登録できない' do
           @item.scheduled_delivery_id = '1'
           @item.valid?
-          expect(@item.errors.full_messages).to include("Category must be other than 1", "Sales status must be other than 1", "Shipping fee status must be other than 1", "Prefecture must be other than 1", "Scheduled delivery must be other than 1")
+          expect(@item.errors.full_messages).to include("Scheduled delivery must be other than 1")
         end
+
       end
 
   end
