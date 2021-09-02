@@ -1,14 +1,33 @@
 require 'rails_helper'
 
 RSpec.describe ItemOrder, type: :model do
-  describe '購入者情報の保存' do
     before do
       @item_order = FactoryBot.build(:item_order)
     end
 
+    context '購入ができる時' do
       it '全ての項目が入力されていれば購入ができる' do
         expect(@item_order).to be_valid
       end
+      it 'building_nameが空でも登録できる' do
+        @item_order.building_name = nil
+        expect(@item_order).to be_valid
+      end
+      it '電話番号は11桁以内の数値のみ保存できる' do
+        @item_order.phone_number = 12_345_678_910
+        expect(@item_order).to be_valid
+      end
+      it 'user_idが空でなければ保存できる' do
+        @item_order.user_id = 1
+        expect(@item_order).to be_valid
+      end
+      it 'item_idが空でなければ保存できる' do
+        @item_order.item_id = 1
+        expect(@item_order).to be_valid
+      end
+    end
+    
+    context '購入ができない時' do
       it 'token(クレジットカード情報)が空だと購入ができない' do
         @item_order.token = nil
         @item_order.valid?
@@ -17,7 +36,7 @@ RSpec.describe ItemOrder, type: :model do
       it '郵便番号が空だと購入ができない' do
         @item_order.postal_code = ""
         @item_order.valid?
-        expect(@item_order.errors.messages).to include({:postal_code => ["can't be blank", "is invalid", "is the wrong length (should be 8 characters)"]})
+        expect(@item_order.errors.messages).to include({:postal_code => ["can't be blank","is invalid","can't be blank","is invalid","is the wrong length (should be 8 characters)"]})
       end
       it '郵便番号にハイフンがないと登録できない' do
         @item_order.postal_code = "12345678"
@@ -54,5 +73,20 @@ RSpec.describe ItemOrder, type: :model do
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Phone number is invalid")
       end
-  end
+      it 'phone_numberは数値以外だと登録できない' do
+        @item_order.phone_number = "080123456789"
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("Phone number is invalid")
+      end
+      it 'user_idが空だと保存できない' do
+        @item_order.user_id = nil
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("User can't be blank")
+      end
+      it 'item_idが空だと保存できない' do
+        @item_order.item_id = nil
+        @item_order.valid?
+        expect(@item_order.errors.full_messages).to include("Item can't be blank")
+      end
+    end
 end
