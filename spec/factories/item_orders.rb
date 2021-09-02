@@ -7,7 +7,5 @@ FactoryBot.define do
     block_name     {'1-1-1'}
     building_name  {'建物ビル'}
     phone_number   {'09022223333'}
-    user_id        { Faker::Number.non_zero_digit }
-    item_id        { Faker::Number.non_zero_digit }
   end
 end

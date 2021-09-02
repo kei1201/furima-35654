@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ItemOrder, type: :model do
-    before do
-      @item_order = FactoryBot.build(:item_order)
-    end
+  before do
+    user = FactoryBot.create(:user)
+    item = FactoryBot.build(:item)
+    @item_order = FactoryBot.build(:item_order, user_id: user.id, item_id: item.id)
+  end
 
     context '購入ができる時' do
       it '全ての項目が入力されていれば購入ができる' do
@@ -11,18 +13,6 @@ RSpec.describe ItemOrder, type: :model do
       end
       it 'building_nameが空でも登録できる' do
         @item_order.building_name = nil
-        expect(@item_order).to be_valid
-      end
-      it '電話番号は11桁以内の数値のみ保存できる' do
-        @item_order.phone_number = 12_345_678_910
-        expect(@item_order).to be_valid
-      end
-      it 'user_idが空でなければ保存できる' do
-        @item_order.user_id = 1
-        expect(@item_order).to be_valid
-      end
-      it 'item_idが空でなければ保存できる' do
-        @item_order.item_id = 1
         expect(@item_order).to be_valid
       end
     end
