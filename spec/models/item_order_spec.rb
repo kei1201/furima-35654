@@ -67,7 +67,7 @@ RSpec.describe ItemOrder, type: :model do
         expect(@item_order.errors.full_messages).to include("Phone number is invalid")
       end
       it 'phone_numberは数値以外だと登録できない' do
-        @item_order.phone_number = "080123456789"
+        @item_order.phone_number = "0a1b3babrfnfkafl"
         @item_order.valid?
         expect(@item_order.errors.full_messages).to include("Phone number is invalid")
       end
