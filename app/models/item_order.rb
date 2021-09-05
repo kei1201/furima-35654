@@ -9,10 +9,10 @@ class ItemOrder
     validates :user_id
     validates :item_id
     validates :prefecture_id, numericality: { other_than: 1 }
-    validates :postal_code, format: { with: /\A\d{3}[-]\d{4}\z/ }
+    validates :postal_code, format: { with: /\A\d{3}[-]\d{4}\z/}, allow_blank: true
     validates :phone_number, format: { with: /\A\d{11}\z/ }
     with_options format: { with: /\A\d{3}[-]\d{4}\z/ } do
-      validates :postal_code, length: { is: 8 }
+      validates :postal_code, length: { is: 8}
     end
   end
 
